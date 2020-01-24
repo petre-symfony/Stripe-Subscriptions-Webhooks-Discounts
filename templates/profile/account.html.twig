@@ -12,7 +12,7 @@
 
             {% if app.user.hasActiveSubscription %}
               {% if app.user.subscription.isCanceled %}
-                !-- todo - add reactivate button --
+                todo - add reactivate button
               {% else %}
                 <form action="{{ path('account_subscription_cancel') }}" method="POST" class="pull-right">
                   <button class="btn btn-danger btn-xs" type="submit">
@@ -42,7 +42,7 @@
               <tr>
                 <th>Next Billing at:</th>
                 <td>
-                  {% if app.user.hasActiveSubscription %}
+                  {% if app.user.hasActiveNonCanceledSubscription %}
                     {{ app.user.subscription.billingPeriodEndsAt|date('F jS') }}
                   {% else %}
                     n/a
@@ -52,7 +52,7 @@
               <tr>
                 <th>Credit Card</th>
                 <td>
-                  {% if app.user.hasActiveSubscription %}
+                  {% if app.user.hasActiveNonCanceledSubscription %}
                     {{ app.user.cardBrand }} ending in {{ app.user.cardLast4 }}
                   {% else %}
                     None
