@@ -4,7 +4,9 @@
 namespace App\Controller;
 
 
+use App\Entity\Subscription;
 use App\StripeClient;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,9 +17,17 @@ class ProfileController extends AbstractController {
 	 * @var StripeClient
 	 */
 	private $stripeClient;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
 
-	public function __construct(StripeClient $stripeClient) {
+	public function __construct(
+		StripeClient $stripeClient,
+		EntityManagerInterface $em
+	) {
 		$this->stripeClient = $stripeClient;
+		$this->em = $em;
 	}
 
 	/**
@@ -32,6 +42,13 @@ class ProfileController extends AbstractController {
 	 */
 	public function cancelSubscriptionAction(){
 		$this->stripeClient->cancelSubscription($this->getUser());
+
+		/** @var Subscription $subscription */
+		$subscription = $this->getUser()->getSubscription();
+		$subscription->deactivateSubscription();
+		$this->em->persist($subscription);
+		$this->em->flush();
+
 		$this->addFlash('success', "Subscription Canceled :(");
 
 		return $this->redirectToRoute('profile_account');
