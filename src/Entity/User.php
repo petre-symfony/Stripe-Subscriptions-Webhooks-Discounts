@@ -174,4 +174,8 @@ class User implements UserInterface {
 
 		return $this;
 	}
+
+	public function hasActiveSubscription(){
+		return $this->getSubscription() && $this->getSubscription()->isActive();
+	}
 }

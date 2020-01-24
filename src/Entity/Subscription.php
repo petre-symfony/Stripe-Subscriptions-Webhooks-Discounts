@@ -99,4 +99,12 @@ class Subscription {
 	  $this->endsAt = $this->billingPeriodEndsAt;
 	  $this->billingPeriodEndsAt = null;
   }
+
+  public function isActive(){
+  	return $this->endsAt === null || $this->endsAt > new \DateTime();
+  }
+
+  public function isCanceled(){
+  	return $this->endsAt !== null;
+  }
 }
