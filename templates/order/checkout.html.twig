@@ -68,15 +68,15 @@
             <tbody>
               {% for product in products %}
                 <tr>
-                  <th class="col-xs-6 checkout-product-name">{{ cart.subscriptionPlan.name }}</th>
-                  <td class="col-xs-3">${{ cart.subscriptionPlan.price }}</td>
+                  <th class="col-xs-6 checkout-product-name">{{ product.name }}</th>
+                  <td class="col-xs-3">${{ product.price }}</td>
                 </tr>
               {% endfor %}
 
               {% if cart.subscriptionPlan %}
                 <tr>
-                  <th class="col-xs-6 checkout-product-name">{{ product.name }}</th>
-                  <td class="col-xs-3">${{ product.price }}</td>
+                  <th class="col-xs-6 checkout-product-name">{{ cart.subscriptionPlan.name }}</th>
+                  <td class="col-xs-3">${{ cart.subscriptionPlan.price }}</td>
                 </tr>
               {% endif %}
             </tbody>
