@@ -21,6 +21,16 @@ class User implements UserInterface {
    */
   private $stripeCustomerId;
 
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	private $cardBrand;
+
+	/**
+	 * @ORM\Column(type="string", length=4, nullable=true)
+	 */
+	private $cardLast4;
+
   /**
    * @ORM\Column(type="string", length=180, unique=true)
    */
@@ -120,8 +130,10 @@ class User implements UserInterface {
   /**
    * @param mixed $stripeCustomerId
    */
-  public function setStripeCustomerId($stripeCustomerId): void{
+  public function setStripeCustomerId($stripeCustomerId): self{
     $this->stripeCustomerId = $stripeCustomerId;
+
+    return $this;
   }
 
 	/**
@@ -129,5 +141,37 @@ class User implements UserInterface {
 	 */
 	public function getSubscription() {
 		return $this->subscription;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCardBrand() {
+		return $this->cardBrand;
+	}
+
+	/**
+	 * @param mixed $cardBrand
+	 */
+	public function setCardBrand($cardBrand): self {
+		$this->cardBrand = $cardBrand;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCardLast4() {
+		return $this->cardLast4;
+	}
+
+	/**
+	 * @param mixed $cardLast4
+	 */
+	public function setCardLast4($cardLast4): self {
+		$this->cardLast4 = $cardLast4;
+
+		return $this;
 	}
 }
