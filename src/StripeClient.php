@@ -68,4 +68,12 @@ class StripeClient {
 
 	  return $subscription;
   }
+
+  public function cancelSubscription(User $user){
+  	$subscription = \Stripe\Subscription::retrieve(
+  		$user->getSubscription()->getStripeSubscriptionId()
+	  );
+  	$subscription->cancel_at_period_end = true;
+  	$subscription->save();
+  }
 }
