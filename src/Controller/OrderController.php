@@ -73,6 +73,13 @@ class OrderController extends AbstractController {
 
   }
 
+	/**
+	 * @Route("/cart/subscription/{planId}", name="order_add_subscription_to_cart")
+	 */
+	public function addSubscriptionToCartAction($planId) {
+		// todo - add the subscription plan to the cart!
+	}
+
   /**
    * @param $token
    * @throws \Stripe\Exception\CardException
