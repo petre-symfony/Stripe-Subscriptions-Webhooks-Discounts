@@ -8,6 +8,7 @@ use App\Entity\Product;
 use App\Entity\User;
 use App\Store\ShoppingCart;
 use App\StripeClient;
+use App\Subscription\SubscriptionHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +23,20 @@ class OrderController extends AbstractController {
    * @var StripeClient
    */
   private $stripeClient;
+	/**
+	 * @var SubscriptionHelper
+	 */
+	private $subscriptionHelper;
 
-  public function __construct(ShoppingCart $cart, StripeClient $stripeClient){
+	public function __construct(
+  	ShoppingCart $cart,
+	  StripeClient $stripeClient,
+		SubscriptionHelper $subscriptionHelper
+  ){
     $this->cart = $cart;
     $this->stripeClient = $stripeClient;
-  }
+		$this->subscriptionHelper = $subscriptionHelper;
+	}
 
   /**
    * @Route("/cart/product/{slug}", name="order_add_product_to_cart", methods={"POST"})
@@ -77,7 +87,15 @@ class OrderController extends AbstractController {
 	 * @Route("/cart/subscription/{planId}", name="order_add_subscription_to_cart")
 	 */
 	public function addSubscriptionToCartAction($planId) {
-		// todo - add the subscription plan to the cart!
+		$plan = $this->subscriptionHelper->findPlan($planId);
+
+		if(!$plan){
+			$this->createNotFoundException('Bad plan id!');
+		}
+
+		$this->cart->addSubscription($planId);
+
+		return $this->redirectToRoute('order_checkout');
 	}
 
   /**

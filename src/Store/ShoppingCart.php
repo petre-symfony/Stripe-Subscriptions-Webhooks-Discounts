@@ -6,6 +6,7 @@ namespace App\Store;
 
 use App\Entity\Product;
 use App\Subscription\SubscriptionHelper;
+use App\Subscription\SubscriptionPlan;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -19,14 +20,20 @@ class ShoppingCart {
   private $em;
 
   private $products;
+	/**
+	 * @var SubscriptionHelper
+	 */
+	private $subscriptionHelper;
 
-  public function __construct(
+	public function __construct(
     SessionInterface $session,
-    EntityManagerInterface $em
+    EntityManagerInterface $em,
+		SubscriptionHelper $subscriptionHelper
   ){
     $this->session = $session;
     $this->em = $em;
-  }
+		$this->subscriptionHelper = $subscriptionHelper;
+	}
 
   public function addProduct(Product $product){
     $products = $this->getProducts();
@@ -37,6 +44,13 @@ class ShoppingCart {
 
     $this->updateProducts($products);
   }
+
+	public function addSubscription($planId) {
+		$this->session->set(
+			self::CART_PLAN_KEY,
+			$planId
+		);
+	}
 
   /**
    * @return Product[]
@@ -61,11 +75,28 @@ class ShoppingCart {
     return $this->products;
   }
 
+	/**
+	 * @return SubscriptionPlan|null
+	 */
+	public function getSubscriptionPlan() {
+		$planId = $this->session->get(self::CART_PLAN_KEY);
+
+		return $this->subscriptionHelper
+			->findPlan($planId);
+	}
+
   public function getTotal(){
     $total = 0;
     foreach ($this->getProducts() as $product) {
       $total += $product->getPrice();
     }
+
+	  if ($this->getSubscriptionPlan()) {
+		  $price = $this->getSubscriptionPlan()
+			  ->getPrice();
+
+		  $total += $price;
+	  }
 
     return $total;
   }
