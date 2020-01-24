@@ -7,12 +7,17 @@ class SubscriptionHelper{
   private $plans = [];
 
   public function __construct() {
-        // todo - add the plans
-//        $this->plans[] = new SubscriptionPlan(
-//            'STRIPE_PLAN_KEY',
-//            'OUR PLAN NAME',
-//            'PRICE'
-//        );
+    $this->plans[] = new SubscriptionPlan(
+      'plan_GbYpuXY2R0LbYf',
+      'farmer_brent_monthly',
+      '99'
+    );
+
+	  $this->plans[] = new SubscriptionPlan(
+		  'plan_GbYrirrvJYKsV7',
+		  'new_zeelander_monthly',
+		  '199'
+	  );
   }
 
   /**
