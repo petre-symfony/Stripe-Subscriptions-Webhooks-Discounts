@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Subscription;
 use App\Entity\User;
 use App\StripeClient;
+use App\Subscription\SubscriptionHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,13 +23,19 @@ class ProfileController extends AbstractController {
 	 * @var EntityManagerInterface
 	 */
 	private $em;
+	/**
+	 * @var SubscriptionHelper
+	 */
+	private $subscriptionHelper;
 
 	public function __construct(
 		StripeClient $stripeClient,
-		EntityManagerInterface $em
+		EntityManagerInterface $em,
+		SubscriptionHelper $subscriptionHelper
 	) {
 		$this->stripeClient = $stripeClient;
 		$this->em = $em;
+		$this->subscriptionHelper = $subscriptionHelper;
 	}
 
 	/**
@@ -59,6 +66,13 @@ class ProfileController extends AbstractController {
 	 * @Route("/profile/subscription/reactivate", name="account_subscription_reactivate", methods={"POST"})
 	 */
 	public function reactivateSubscriptionAction(){
-		$this->stripeClient->reactivateSubscription($this->getUser());
+		$stripeSubscription = $this
+			->stripeClient->reactivateSubscription($this->getUser());
+
+		$this->subscriptionHelper->addSubscriptionToUser($stripeSubscription, $this->getUser());
+
+		$this->addFlash('success', 'Welcome back!');
+
+		return $this->redirectToRoute('profile_account');
 	}
 }
