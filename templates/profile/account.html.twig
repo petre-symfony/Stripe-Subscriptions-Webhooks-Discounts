@@ -12,7 +12,11 @@
 
             {% if app.user.hasActiveSubscription %}
               {% if app.user.subscription.isCanceled %}
-                todo - add reactivate button
+                <form action="{{ path('account_subscription_reactivate') }}" method="POST" class="pull-right">
+                  <button class="btn btn-success btn-xs" type="submit">
+                    Reactivate Subscription
+                  </button>
+                </form>
               {% else %}
                 <form action="{{ path('account_subscription_cancel') }}" method="POST" class="pull-right">
                   <button class="btn btn-danger btn-xs" type="submit">
