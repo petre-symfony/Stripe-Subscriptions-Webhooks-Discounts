@@ -106,7 +106,6 @@ class StripeClient {
 	/**
 	 * @param $eventId
 	 * @return \Stripe\Event
-	 * @throws \Stripe\Exception\ApiErrorException
 	 */
   public function findEvent($eventId){
   	return \Stripe\Event::retrieve($eventId);
