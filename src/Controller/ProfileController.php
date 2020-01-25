@@ -83,4 +83,11 @@ class ProfileController extends AbstractController {
 
 		return $this->redirectToRoute('profile_account');
 	}
+
+	/**
+	 * @Route("/profile/card/update", name="account_update_credit_card", methods={"POST"})
+	 */
+	public function updateCreditCardAction() {
+
+	}
 }
