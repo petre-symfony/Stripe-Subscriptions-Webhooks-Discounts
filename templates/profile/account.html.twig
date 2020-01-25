@@ -2,6 +2,7 @@
 
 {%  block javascripts %}
   {{ parent() }}
+  {{ include('order/_creditCardFormJavaScript.html.twig') }}
 
   <script>
     jQuery(document).ready(function () {
