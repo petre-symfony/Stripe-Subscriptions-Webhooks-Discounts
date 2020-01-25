@@ -91,7 +91,13 @@ class ProfileController extends AbstractController {
 		$token = $request->request->get('stripeToken');
 		$user = $this->getUser();
 
-		$this->stripeClient
+		$stripeCustomer = $this->stripeClient
 			->updateCustomerCard($user, $token);
+
+		$this->subscriptionHelper->updateCardDetails($user, $stripeCustomer);
+
+		$this->addFlash('success', 'Card Updated!');
+
+		return $this->redirectToRoute('profile_account');
 	}
 }
