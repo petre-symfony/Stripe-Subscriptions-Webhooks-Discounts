@@ -12,17 +12,29 @@ class WebhookControllerTest extends WebTestCase {
 	/** @var EntityManagerInterface */
 	private $em;
 
+	private $client;
+
 	public function setup(){
+		$this->client = static::createClient();
 		$this->em = static::$container->get(EntityManagerInterface::class);
 	}
 
+	public function testStripeCustomerSubscriptionDeleted(){
+		$subscription = $this->createSubscription();
+
+		//to do send the cancelation webhook
+
+		$this->assertFalse($subscription->isActive());
+	}
+	
   private function createSubscription(){
 		$user = new User();
 		$user->setEmail('fluffy'.mt_rand().'@sheep.com');
-	  $encoded = self::$container
+	  $encoded = static::$container
 		  ->get(UserPasswordEncoderInterface::class)
 		  ->encodePassword($user, 'baa');
 	  $user->setPassword($encoded);
+	  $this->em->persist($user);
 
 	  $subscription = new Subscription();
 	  $subscription->setUser($user);
@@ -32,8 +44,8 @@ class WebhookControllerTest extends WebTestCase {
 		   new \DateTime('+1 month')
 	  );
 
-	  $this->em->get(EntityManagerInterface::class)->persist($subscription);
-	  $this->em->flush($subscription);
+	  $this->em->persist($subscription);
+	  $this->em->flush();
 
 	  return $subscription;
   }
