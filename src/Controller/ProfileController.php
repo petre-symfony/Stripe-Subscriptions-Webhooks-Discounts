@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Entity\Subscription;
+use App\Entity\User;
 use App\StripeClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,6 +59,6 @@ class ProfileController extends AbstractController {
 	 * @Route("/profile/subscription/reactivate", name="account_subscription_reactivate", methods={"POST"})
 	 */
 	public function reactivateSubscriptionAction(){
-
+		$this->stripeClient->reactivateSubscription($this->getUser());
 	}
 }
