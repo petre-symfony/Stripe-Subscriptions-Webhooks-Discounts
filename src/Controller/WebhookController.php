@@ -45,7 +45,13 @@ class WebhookController extends AbstractController{
 	  }
 
   	$eventId = $data['id'];
-  	$stripeEvent = $this->stripeClient->findEvent($eventId);
+  	if($this->getParameter('verify_stripe_event') === "false"){
+		  // fake the Stripe_Event in the test environment
+		  $stripeEvent = json_decode($request->getContent());
+	  } elseif($this->getParameter('verify_stripe_event') === "true") {
+		  $stripeEvent = $this->stripeClient->findEvent($eventId);
+	  }
+
 
   	switch($stripeEvent->type){
 		  case 'customer.subscription.deleted':

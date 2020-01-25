@@ -34,7 +34,6 @@ class WebhookControllerTest extends WebTestCase {
 			[],
 			$eventJson
 		);
-		dd($this->client->getResponse()->getContent());
 
 		$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 		$this->assertFalse($subscription->isActive());
@@ -48,6 +47,7 @@ class WebhookControllerTest extends WebTestCase {
 		  ->encodePassword($user, 'baa');
 	  $user->setPassword($encoded);
 	  $this->em->persist($user);
+
 
 	  $subscription = new Subscription();
 	  $subscription->setUser($user);
