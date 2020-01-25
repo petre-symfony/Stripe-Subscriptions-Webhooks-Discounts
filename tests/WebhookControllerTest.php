@@ -26,6 +26,17 @@ class WebhookControllerTest extends WebTestCase {
 			$subscription->getStripeSubscriptionId()
 		);
 
+		$this->client->request(
+			"POST",
+			'webhooks/stripe',
+			[],
+			[],
+			[],
+			$eventJson
+		);
+		dd($this->client->getResponse()->getContent());
+
+		$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 		$this->assertFalse($subscription->isActive());
 	}
 	
