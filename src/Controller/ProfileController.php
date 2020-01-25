@@ -49,11 +49,16 @@ class ProfileController extends AbstractController {
 	 * @Route("/profile/subscription/cancel", name="account_subscription_cancel", methods={"POST"})
 	 */
 	public function cancelSubscriptionAction(){
-		$this->stripeClient->cancelSubscription($this->getUser());
+		$stripeSubscription = $this->stripeClient->cancelSubscription($this->getUser());
 
 		/** @var Subscription $subscription */
 		$subscription = $this->getUser()->getSubscription();
-		$subscription->deactivateSubscription();
+		if($stripeSubscription->status == 'canceled'){
+			$subscription->cancel();
+		} else {
+			$subscription->deactivateSubscription();
+		}
+
 		$this->em->persist($subscription);
 		$this->em->flush();
 
