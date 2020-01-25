@@ -35,6 +35,10 @@ class WebhookControllerTest extends WebTestCase {
 			$eventJson
 		);
 
+		$subscription = $this->em
+			->getRepository('App:Subscription')
+			->find($subscription->getId());
+
 		$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 		$this->assertFalse($subscription->isActive());
 	}
