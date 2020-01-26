@@ -143,4 +143,11 @@ class ProfileController extends AbstractController {
 
 		return new JsonResponse(['total' => $total / 100]);
 	}
+
+	/**
+	 * @Route("/profile/plan/change/execute/{planId}", name="account_execute_plan_change")
+	 */
+	public function changePlanAction($planId){
+		$plan = $this->subscriptionHelper->findPlan($planId);
+	}
 }
