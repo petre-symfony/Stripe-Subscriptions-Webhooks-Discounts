@@ -55,7 +55,15 @@ class StripeClient {
       'customer' => $user->getStripeCustomerId()
     ]);
     if($payImediately) {
-      $invoice->pay();
+    	//guarantee it charges rifgt now
+	    try {
+        $invoice->pay();
+	    } catch (\Stripe\Exception\CardException $e){
+				$invoice->closed = true;
+				$invoice->save();
+
+				throw $e;
+	    }
     }
     return $invoice;
   }
@@ -135,10 +143,20 @@ class StripeClient {
 			$user->getSubscription()->getStripeSubscriptionId()
 		);
 
+		$originalPlanId = $stripeSubscription->plan->id;
+
 		$stripeSubscription->plan = $newPlan->getPlanId();
 		$stripeSubscription->save();
 
-		$this->createInvoice($user);
+		try {
+			$this->createInvoice($user);
+		} catch(\Stripe\Exception\CardException $e) {
+			$stripeSubscription->plan = $originalPlanId;
+			$stripeSubscription->prorate = false;
+			$stripeSubscription->save();
+
+			throw $e;
+		}
 
 		return $stripeSubscription;
 	}
