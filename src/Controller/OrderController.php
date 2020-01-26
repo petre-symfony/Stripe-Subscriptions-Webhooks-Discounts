@@ -110,7 +110,13 @@ class OrderController extends AbstractController {
 			return $this->redirectToRoute('order_checkout');
 		}
 
-		$stripeCoupon = $this->stripeClient->findCoupon($code);
+		try {
+			$stripeCoupon = $this->stripeClient->findCoupon($code);
+		} catch(\Stripe\Exception\InvalidRequestException $e){
+			$this->addFlash('error', 'Invalid Coupon code');
+
+			return $this->redirectToRoute('order_checkout');
+		}
 
 		$this->cart->setCouponCode($code, $stripeCoupon->amount_off/100);
 
