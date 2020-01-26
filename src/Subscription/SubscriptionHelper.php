@@ -42,6 +42,14 @@ class SubscriptionHelper{
     }
   }
 
+	public function findPlanByName($planName){
+		foreach ($this->plans as $plan) {
+			if ($plan->getName() == $planName) {
+				return $plan;
+			}
+		}
+	}
+
   public function addSubscriptionToUser(
   	\Stripe\Subscription $stripeSubscription,
 	  User $user
@@ -92,5 +100,18 @@ class SubscriptionHelper{
 
 		$this->em->persist($subscription);
 		$this->em->flush($subscription);
+	}
+
+	/**
+	 * @param $currentPlanName
+	 * @return SubscriptionPlan|null
+	 */
+	public function findPlanToChangeTo($currentPlanName){
+		if (strpos($currentPlanName, 'farmer_brent') !== false) {
+			$newPlanName = str_replace('farmer_brent', 'new_zeelander', $currentPlanName);
+		} else {
+			$newPlanName = str_replace('new_zeelander', 'farmer_brent', $currentPlanName);
+		}
+		return $this->findPlanByName($newPlanName);
 	}
 }

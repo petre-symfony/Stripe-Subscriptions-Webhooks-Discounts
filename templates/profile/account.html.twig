@@ -54,6 +54,12 @@
                       {{ current_plan.name }}
 
                       <span class="label label-success">Active</span>
+
+                      <button class="btn btn-xs btn-link pull-right js-change-plan-button"
+                          data-plan-name = "{{ other_plan.name }}"
+                      >
+                        Change to {{ other_plan.name }}
+                      </button>
                     {% endif %}
                   {% else %}
                     <span class="label label-default">None</span>
