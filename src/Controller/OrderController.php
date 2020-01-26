@@ -118,6 +118,12 @@ class OrderController extends AbstractController {
 			return $this->redirectToRoute('order_checkout');
 		}
 
+		if(!$stripeCoupon->valid){
+			$this->addFlash('error', 'Coupon Expired!');
+
+			return $this->redirectToRoute('order_checkout');
+		}
+
 		$this->cart->setCouponCode($code, $stripeCoupon->amount_off/100);
 
 		$this->addFlash('success', 'Coupon applied!');
