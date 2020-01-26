@@ -10,6 +10,7 @@ use App\StripeClient;
 use App\Subscription\SubscriptionHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -120,5 +121,23 @@ class ProfileController extends AbstractController {
 		$this->addFlash('success', 'Card Updated!');
 
 		return $this->redirectToRoute('profile_account');
+	}
+
+	/**
+	 * @Route("/profile/plan/change/preview/{planId}", name="account_preview_plan_change")
+	 */
+	public function previewPlanChangeAction($planId){
+		$plan = $this->subscriptionHelper->findPlan($planId);
+
+		$stripeInvoice = $this->stripeClient
+			->getUpcomingInvoiceForChangedSubscription(
+				$this->getUser(),
+				$plan
+			)
+		;
+
+		dump($stripeInvoice);
+
+		return new JsonResponse(['total' => 50]);
 	}
 }
