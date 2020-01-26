@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\StripeEventLog;
 use App\Repository\SubscriptionRepository;
 use App\StripeClient;
 use App\Subscription\SubscriptionHelper;
@@ -45,6 +46,18 @@ class WebhookController extends AbstractController{
 	  }
 
   	$eventId = $data['id'];
+
+  	$em = $this->getDoctrine()->getManager();
+  	$existingLog = $em->getRepository('App:StripeEventLog')
+		  ->findOneBy(['stripeEventId' => $eventId]);
+  	if($existingLog){
+			return new Response('Event previously handled');
+	  }
+
+  	$log = new StripeEventLog($eventId);
+  	$em->persist($log);
+  	$em->flush($log);
+
   	if($this->getParameter('verify_stripe_event') === "false"){
 		  // fake the Stripe_Event in the test environment
 		  $stripeEvent = json_decode($request->getContent());
