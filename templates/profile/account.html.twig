@@ -123,6 +123,18 @@
                 <td>
                   {% if app.user.hasActiveNonCanceledSubscription %}
                     {{ app.user.subscription.billingPeriodEndsAt|date('F jS') }}
+
+                    <button class="btn btn-xs btn-link pull-right js-change-plan-button"
+                        data-plan-name="{{ other_duration_plan.name }}"
+                        data-preview-url="{{ path('account_preview_plan_change', {
+                          planId: other_duration_plan.planId
+                        }) }}"
+                        data-change-url="{{ path('account_execute_plan_change', {
+                          planId: other_duration_plan.planId
+                        }) }}"
+                    >
+                      Bill {{ other_duration_plan.duration }}
+                    </button>
                   {% else %}
                     n/a
                   {% endif %}

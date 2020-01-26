@@ -128,4 +128,13 @@ class SubscriptionHelper{
 		}
 		return $this->findPlanByName($newPlanName);
 	}
+
+	public function findPlanForOtherDuration($currentPlanName){
+		if (strpos($currentPlanName, 'monthly') !== false) {
+			$newPlanName = str_replace('monthly', 'yearly', $currentPlanName);
+		} else {
+			$newPlanName = str_replace('yearly', 'monthly', $currentPlanName);
+		}
+		return $this->findPlanByName($newPlanName);
+	}
 }

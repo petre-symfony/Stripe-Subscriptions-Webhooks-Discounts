@@ -46,11 +46,15 @@ class ProfileController extends AbstractController {
 	public function accountAction() {
 		$currentPlan = null;
 		$otherPlan = null;
+		$otherDurationPlan = null;
 		if($this->getUser()->hasActiveSubscription()){
 			$currentPlan = $this->subscriptionHelper->findPlan(
 				$this->getUser()->getSubscription()->getStripePlanId()
 			);
 			$otherPlan = $this->subscriptionHelper->findPlanToChangeTo(
+				$currentPlan->getName()
+			);
+			$otherDurationPlan = $this->subscriptionHelper->findPlanForOtherDuration(
 				$currentPlan->getName()
 			);
 		}
@@ -59,7 +63,8 @@ class ProfileController extends AbstractController {
 			'error' => null,
 			'stripe_public_key' => $this->getParameter('stripe_public_key'),
 			'current_plan' => $currentPlan,
-			'other_plan' => $otherPlan
+			'other_plan' => $otherPlan,
+			'other_duration_plan' => $otherDurationPlan
 		]);
 	}
 
