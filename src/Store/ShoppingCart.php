@@ -144,4 +144,8 @@ class ShoppingCart {
 
     $this->session->set(self::CART_PRODUCTS_KEY, $ids);
   }
+
+	private function updatePlanId($planId) {
+		$this->session->set(self::CART_PLAN_KEY, $planId);
+	}
 }

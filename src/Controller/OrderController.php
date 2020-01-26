@@ -136,6 +136,11 @@ class OrderController extends AbstractController {
 
     $this->subscriptionHelper->updateCardDetails($user, $stripeCustomer);
 
+    if($this->cart->getCouponCodeValue()){
+			$stripeCustomer->coupon = $this->cart->getCouponCode();
+			$stripeCustomer->save();
+    }
+
     foreach ($this->cart->getProducts() as $product) {
       $stripeClient->createInvoiceItem(
         $product->getPrice() * 100,
