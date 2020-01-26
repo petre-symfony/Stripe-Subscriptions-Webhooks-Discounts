@@ -111,7 +111,12 @@ class OrderController extends AbstractController {
 		}
 
 		$stripeCoupon = $this->stripeClient->findCoupon($code);
-		dd($stripeCoupon);
+
+		$this->cart->setCouponCode($code, $stripeCoupon->amount_off/100);
+
+		$this->addFlash('success', 'Coupon applied!');
+
+		return $this->redirectToRoute('order_checkout');
 	}
 
   /**

@@ -85,6 +85,26 @@ class ShoppingCart {
 			->findPlan($planId);
 	}
 
+	public function setCouponCode($code, $value) {
+		$this->session->set(
+			self::CART_COUPON_CODE_KEY,
+			$code
+		);
+
+		$this->session->set(
+			self::CART_COUPON_VALUE_KEY,
+			$value
+		);
+	}
+
+	public function getCouponCode() {
+		return $this->session->get(self::CART_COUPON_CODE_KEY);
+	}
+
+	public function getCouponCodeValue() {
+		return $this->session->get(self::CART_COUPON_VALUE_KEY);
+	}
+
   public function getTotal(){
     $total = 0;
     foreach ($this->getProducts() as $product) {
@@ -101,8 +121,15 @@ class ShoppingCart {
     return $total;
   }
 
-  public function emptyCart(){
+	public function getTotalWithDiscount() {
+		return max($this->getTotal() - $this->getCouponCodeValue(), 0);
+	}
+
+
+	public function emptyCart(){
     $this->updateProducts([]);
+	  $this->updatePlanId(null);
+	  $this->setCouponCode(null, null);
   }
 
   /**
