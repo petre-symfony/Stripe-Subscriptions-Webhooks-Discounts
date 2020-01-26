@@ -12,6 +12,11 @@
         $('.js-update-card-wrapper').slideToggle();
       });
     });
+
+    $('.js-change-plan-button').on('click', function (e) {
+      e.preventDefault();
+      swal('Loading Plan Details');
+    });
   </script>
 {%  endblock %}
 
