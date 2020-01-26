@@ -73,6 +73,18 @@ class WebhookController extends AbstractController{
 			  }
 
 			  break;
+		  case 'invoice.payment_failed':
+			  $stripeSubscriptionId = $stripeEvent->data->object->subscription;
+
+			  if($stripeSubscriptionId){
+				  $subscription = $this->findSubscription($stripeSubscriptionId);
+				  if($stripeEvent->data->object->attempt_count == 1){
+					  //todo - send an email
+					  $user = $subscription->getUser();
+				  }
+			  }
+
+			  break;
 		  default:
 			  // we receive all webhook types
 		  	// throw new \Exception('Unexpected webhook from stripe' . $stripeEvent->type);
