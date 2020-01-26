@@ -110,4 +110,12 @@ class StripeClient {
   public function findEvent($eventId){
   	return \Stripe\Event::retrieve($eventId);
   }
+
+	/**
+	 * @param $stripeSubscriptionId
+	 * @return \Stripe\Subscription
+	 */
+	public function findSubscription($stripeSubscriptionId){
+		return \Stripe\Subscription::retrieve($stripeSubscriptionId);
+	}
 }
