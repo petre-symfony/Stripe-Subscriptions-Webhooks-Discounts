@@ -149,5 +149,9 @@ class ProfileController extends AbstractController {
 	 */
 	public function changePlanAction($planId){
 		$plan = $this->subscriptionHelper->findPlan($planId);
+
+		$stripeSubscription = $this
+			->stripeClient
+			->changePlan($this->getUser(), $plan);
 	}
 }
