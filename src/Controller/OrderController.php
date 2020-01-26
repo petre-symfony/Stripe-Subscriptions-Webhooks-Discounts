@@ -101,8 +101,17 @@ class OrderController extends AbstractController {
 	/**
 	 * @Route("/checkout/coupon", name="order_add_coupon", methods={"POST"})
 	 */
-	public function addCouponAction(){
+	public function addCouponAction(Request $request){
+		$code = $request->request->get('code');
 
+		if(!$code){
+			$this->addFlash('error', 'Missing coupon code!');
+
+			return $this->redirectToRoute('order_checkout');
+		}
+
+		$stripeCoupon = $this->stripeClient->findCoupon($code);
+		dd($stripeCoupon);
 	}
 
   /**
