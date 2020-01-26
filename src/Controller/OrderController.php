@@ -50,7 +50,7 @@ class OrderController extends AbstractController {
   }
 
   /**
-   * @Route("/checkout", name="order_checkout", schemes={"https"})
+   * @Route("/checkout", name="order_checkout")
    * @IsGranted("ROLE_USER")
    */
   public function checkoutAction(Request $request){
@@ -96,6 +96,13 @@ class OrderController extends AbstractController {
 		$this->cart->addSubscription($planId);
 
 		return $this->redirectToRoute('order_checkout');
+	}
+
+	/**
+	 * @Route("/checkout/coupon", name="order_add_coupon", methods={"POST"})
+	 */
+	public function addCouponAction(){
+
 	}
 
   /**
