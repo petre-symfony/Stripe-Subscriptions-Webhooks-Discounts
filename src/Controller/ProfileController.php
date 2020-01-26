@@ -151,9 +151,15 @@ class ProfileController extends AbstractController {
 	public function changePlanAction($planId){
 		$plan = $this->subscriptionHelper->findPlan($planId);
 
-		$stripeSubscription = $this
-			->stripeClient
-			->changePlan($this->getUser(), $plan);
+		try{
+			$stripeSubscription = $this
+				->stripeClient
+				->changePlan($this->getUser(), $plan);
+		} catch (\Stripe\Exception\CardException $e){
+			return new JsonResponse([
+				'message' => $e->getMessage()
+			], 400);
+		}
 
 		$this->subscriptionHelper
 			->addSubscriptionToUser($stripeSubscription, $this->getUser());
