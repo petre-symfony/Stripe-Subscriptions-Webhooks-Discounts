@@ -21,11 +21,25 @@ class SubscriptionHelper{
       '99'
     );
 
+		$this->plans[] = new SubscriptionPlan(
+			'plan_GcRX0jIdxXlTzh',
+			'farmer_brent_yearly',
+			'990',
+			SubscriptionPlan::DURATION_YEARLY
+		);
+
 	  $this->plans[] = new SubscriptionPlan(
 		  'plan_GbYrirrvJYKsV7',
 		  'new_zeelander_monthly',
 		  '199'
 	  );
+
+		$this->plans[] = new SubscriptionPlan(
+			'plan_GcRZv5SyNgX7x0',
+			'new_zeelander_yearly',
+			'1990',
+			SubscriptionPlan::DURATION_YEARLY
+		);
 
 		$this->em = $em;
 	}
