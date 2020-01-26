@@ -42,9 +42,17 @@ class ProfileController extends AbstractController {
 	 * @Route("/profile", name="profile_account")
 	 */
 	public function accountAction() {
+		$currentPlan = null;
+		if($this->getUser()->hasActiveSubscription()){
+			$currentPlan = $this->subscriptionHelper->findPlan(
+				$this->getUser()->getSubscription()->getStripePlanId()
+			);
+		}
+
 		return $this->render('profile/account.html.twig', [
 			'error' => null,
-			'stripe_public_key' => $this->getParameter('stripe_public_key')
+			'stripe_public_key' => $this->getParameter('stripe_public_key'),
+			'current_plan' => $currentPlan
 		]);
 	}
 
