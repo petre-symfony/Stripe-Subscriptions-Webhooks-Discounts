@@ -136,8 +136,11 @@ class ProfileController extends AbstractController {
 			)
 		;
 
-		dump($stripeInvoice);
+		// contains the pro-rations *plus* the next cycle's amount
+		$total = $stripeInvoice->amount_due;
 
-		return new JsonResponse(['total' => 50]);
+		$total -= $plan->getPrice() * 100;
+
+		return new JsonResponse(['total' => $total / 100]);
 	}
 }
