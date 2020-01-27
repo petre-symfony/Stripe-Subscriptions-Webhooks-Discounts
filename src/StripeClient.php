@@ -19,10 +19,14 @@ class StripeClient {
   }
 
   public function createCustomer(User $user, $paymentToken){
-    $customer = \Stripe\Customer::create([
-      "email" => $user->getEmail(),
-      "source" => $paymentToken // obtained with Stripe.js
-    ]);
+  	$data = [
+		  "email" => $user->getEmail()
+	  ];
+
+	  if($paymentToken){
+		  $data['source'] = $paymentToken;
+	  }
+    $customer = \Stripe\Customer::create($data);
 
     $user->setStripeCustomerId($customer->id);
 
@@ -173,5 +177,9 @@ class StripeClient {
 	 */
 	public function findCoupon($code){
 		return \Stripe\Coupon::retrieve($code);
+	}
+
+	public function findCustomer(User $user){
+		return \Stripe\Customer::retrieve($user->getStripeCustomerId());
 	}
 }
