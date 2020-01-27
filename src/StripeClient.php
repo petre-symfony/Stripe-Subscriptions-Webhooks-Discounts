@@ -204,4 +204,8 @@ class StripeClient {
 
 		return $invoices;
 	}
+
+	public function findInvoice($invoiceId){
+		return \Stripe\Invoice::retrieve($invoiceId);
+	}
 }
